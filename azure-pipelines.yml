@@ -21,8 +21,8 @@ jobs:
       SonarQube: 'Peach'
       scannerMode: 'CLI'
       configMode: 'manual'
-      cliProjectKey: 'geoffray-azure-cmake-linux-test'
-      cliProjectName: 'geoffray-azure-cmake-linux-test'
+      cliProjectKey: 'geoffray-azure-automake-linux-test'
+      cliProjectName: 'geoffray-azure-automake-linux-test'
       cliSources: 'src'
       extraProperties: 'sonar.cfamily.build-wrapper-output=build_wrapper_output_directory'
   - bash: |
@@ -30,13 +30,12 @@ jobs:
       unzip build-wrapper-linux-x86.zip
     displayName: Install buildwrapper
   - bash: |
-      mkdir build
-      cd build
-      cmake ..
+      autoreconf --install
+      ./configure
     workingDirectory: .
     displayName: Prepare build
   - bash: |
-      build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory cmake --build build/ --config Release
+      build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory make clean all
     displayName: Compile project in build wrapper
   - task: SonarQubeAnalyze@4
 
@@ -55,8 +54,8 @@ jobs:
       organization: 'geoffray-adde-sonarsource-github'
       scannerMode: 'CLI'
       configMode: 'manual'
-      cliProjectKey: 'geoffray-azure-cmake-linux-test'
-      cliProjectName: 'geoffray-azure-cmake-linux-test'
+      cliProjectKey: 'geoffray-azure-automake-linux-test'
+      cliProjectName: 'geoffray-azure-automake-linux-test'
       cliSources: 'src'
       extraProperties: 'sonar.cfamily.build-wrapper-output=build_wrapper_output_directory'
   - bash: |
@@ -64,12 +63,11 @@ jobs:
       unzip build-wrapper-linux-x86.zip
     displayName: Install buildwrapper
   - bash: |
-      mkdir build
-      cd build
-      cmake ..
+      autoreconf --install
+      ./configure
     workingDirectory: .
     displayName: Prepare build
   - bash: |
-      build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory cmake --build build/ --config Release
+      build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory make clean all
     displayName: Compile project in build wrapper
   - task: SonarCloudAnalyze@1
